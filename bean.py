@@ -5,7 +5,7 @@ import pymysql
 from decouple import config
 
 #db = SqliteDatabase('analyst.db')
-db = MySQLDatabase(config('DATABASE'),user=config('DB_USER_NAME'),password=config('DB_PASSWORD'),charset='utf8mb4')
+db = MySQLDatabase(config('DATABASE'),host = config('HOST'),user=config('DB_USER_NAME'),password=config('DB_PASSWORD'),charset='utf8mb4')
 db.connect()
 class Person(Model):
 	name = CharField()
