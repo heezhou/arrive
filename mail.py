@@ -4,13 +4,13 @@
 from imbox import Imbox
 from bs4 import BeautifulSoup
 from datetime import date,datetime
-import time
+import time,os
 from bean import DailyExpense
 import when 
 from apscheduler.schedulers.background import BackgroundScheduler
 from decouple import config
 #Messages sent from 
-#strdate = '2016-07-16'
+#strdate = '2016-10-19'
 #print(when.yesterday())
 #date_time = datetime.strptime(strdate,'%Y-%m-%d').date()
 def getmaildata():
@@ -26,14 +26,18 @@ def getmaildata():
 	c,n = 0,0	
 	#解析数据
 	for uid,message in messages_from:
-		html = str(message.body['html'])
-		a = html[2:-2]
-		soup = BeautifulSoup(a,'html.parser')
-		b = soup.find_all('font')
-		for s in b:
-			if s.string is not None:
-				ldata.append(s.string)
+		if message.subject == '信用管家消费提醒':
+		    html = str(message.body['html'])
+		    a = html[2:-2]
+		    soup = BeautifulSoup(a,'html.parser')
+		    b = soup.find_all('font')
+		    for s in b:
+			    if s.string is not None:
+				    ldata.append(s.string)
 	print('=====Praser Data Success  Size:%s ====='%str(len(ldata)/6))
+	# for m in ldata:
+		# print(m)
+		# print(m,file = open('a123.txt','a'))
 	#写入数据库
 	while n < len(ldata)/6:
 		try:
@@ -45,6 +49,7 @@ def getmaildata():
 		n,c = n+1,c+6
 
 if __name__ == '__main__':
+	print(os.getcwd())
 	getmaildata()
 
 
